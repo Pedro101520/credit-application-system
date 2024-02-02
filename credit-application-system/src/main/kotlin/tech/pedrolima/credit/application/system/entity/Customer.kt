@@ -1,0 +1,21 @@
+package tech.pedrolima.credit.application.system.entity
+
+//O Entity serve para falar pro Kotlin, que esta classe vai ser uma tabela no banco de dados
+import jakarta.persistence.*
+
+@Entity
+//@Table(name = "Cliente")
+data class Customer(
+    @Column(nullable = false) var firstName: String = "",
+    @Column(nullable = false) var lastName: String = "",
+    @Column(nullable = false, unique = true) val cpf: String,
+    @Column(nullable = false, unique = true) var email: String = "",
+    @Column(nullable = false) var password: String = "",
+    @Column(nullable = false) @Embedded var address: Address = Address(),
+    @Column(nullable = false) @OneToMany(fetch = FetchType.LAZY,
+        cascade = arrayOf(CascadeType.REMOVE, CascadeType.PERSIST),
+    mappedBy = "customer")
+    var credits: List<Credit> = mutableListOf(),
+    //Aqui vai ser especificado o primary key
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null
+)
